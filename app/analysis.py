@@ -120,6 +120,14 @@ def _to_plane_roots(coeffs_ascending: list[float]) -> tuple[list[complex], float
     return roots, trimmed[0]
 
 
+def plane_roots(coeffs_ascending: list[float]) -> tuple[list[complex], float]:
+    """升幂 z^-1 系数 -> (z 平面根, 首项非零系数)。
+
+    级联链路模块按段求根时复用此入口（段内阶数低，求根数值稳定）。
+    """
+    return _to_plane_roots(coeffs_ascending)
+
+
 def zero_pole_analysis(b: list[float], a: list[float]) -> dict[str, object]:
     """求分子分母的根（零点 / 极点），报告到单位圆距离并标注稳定性。
 

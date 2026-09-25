@@ -7,6 +7,7 @@
 - polynomial:   多项式乘法 / 求值 / 求根（核心手写逻辑）
 - phase:        相位展开（核心手写逻辑）
 - analysis:     频响求值与零极点分析
+- cascade:      级联链路合成与链路级指标（sections/chain/metrics/service/api）
 - validation:   输入校验
 - schemas:      请求 / 响应模型
 - main:         FastAPI 路由
