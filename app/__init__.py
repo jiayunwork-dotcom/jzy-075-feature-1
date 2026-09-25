@@ -7,9 +7,12 @@
 - polynomial:   多项式乘法 / 求值 / 求根（核心手写逻辑）
 - phase:        相位展开（核心手写逻辑）
 - analysis:     频响求值与零极点分析
+- cascade:      级联链路段解析、等效卷积合成、二阶节组织与稳定性归属
+- chain_metrics: 链路级指标（通带纹波 / 阻带衰减 / 相位线性度与群延时）
 - validation:   输入校验
 - schemas:      请求 / 响应模型
-- main:         FastAPI 路由
+- main:         FastAPI 路由（单滤波器）
+- cascade_api:  FastAPI 路由（级联链路，独立路径）
 """
 
 __all__ = ["__version__"]

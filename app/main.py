@@ -1,8 +1,9 @@
-"""FastAPI 路由层：三个 HTTP 接口，传 JSON 拿 JSON。
+"""FastAPI 路由层：单滤波器三个接口 + 级联链路一条独立路径，传 JSON 拿 JSON。
 
 POST /api/v1/filters/design        设计 FIR（窗函数法）或 IIR（巴特沃斯+双线性）
 POST /api/v1/filters/frequency     频响：幅度 dB + 展开相位（弧度）
 POST /api/v1/filters/zero-poles    零极点：到单位圆距离 + 不稳定标注
+POST /api/v1/filters/cascade       级联链路：等效合成 + 链路级指标（独立路由模块）
 """
 
 from __future__ import annotations
@@ -13,6 +14,7 @@ from fastapi.responses import JSONResponse
 from . import __version__
 from .analysis import frequency_response, zero_pole_analysis
 from .butterworth import design_iir_lowpass
+from .cascade_api import router as cascade_router
 from .errors import FilterError
 from .fir import design_fir_lowpass
 from .schemas import (
@@ -28,8 +30,9 @@ from .windows import normalize_window_name
 app = FastAPI(
     title="低通滤波器设计与分析服务",
     version=__version__,
-    description="FIR 窗函数法 / IIR 巴特沃斯双线性变换设计，频响与零极点分析。",
+    description="FIR 窗函数法 / IIR 巴特沃斯双线性变换设计，频响与零极点分析，级联链路合成与链路级指标。",
 )
+app.include_router(cascade_router)
 
 
 @app.exception_handler(FilterError)

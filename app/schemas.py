@@ -83,3 +83,52 @@ class ZeroPoleResponse(BaseModel):
     poles: list[RootItem]
     gain: float
     stable: bool
+
+
+class CascadeRequest(BaseModel):
+    """级联链路合成与分析请求。
+
+    segments 的元素与 passband/stopband 的具体内容交给 cascade /
+    chain_metrics 模块显式校验并给出中文原因，模型层只限定 JSON 形状。
+    """
+
+    model_config = ConfigDict(extra="ignore")
+
+    segments: list = Field(..., description="按顺序排列的滤波段：设计意图或系数")
+    passband: list = Field(..., description="归一化通带 [下限, 上限)，相对奈奎斯特")
+    stopband: list = Field(..., description="归一化阻带 (下限, 上限]，相对奈奎斯特")
+
+
+class CascadeSegmentOut(BaseModel):
+    position: int
+    type: str
+    b: list[float]
+    a: list[float]
+    spec: dict
+
+
+class CascadeMetricsOut(BaseModel):
+    reference_level_db: float
+    reference_frequency: float
+    passband_ripple_db: float
+    passband_max_db: float
+    passband_min_db: float
+    passband_min_frequency: float
+    stopband_attenuation_db: float
+    stopband_worst_db: float
+    stopband_worst_frequency: float
+    group_delay_samples: float
+    group_delay_variation_samples: float
+    phase_max_deviation_rad: float
+    phase_rms_deviation_rad: float
+    linear_phase: bool
+    stable: bool
+    unstable_segments: list[int]
+    unstable_poles: list[dict]
+
+
+class CascadeResponse(BaseModel):
+    b: list[float]
+    a: list[float]
+    segments: list[CascadeSegmentOut]
+    metrics: CascadeMetricsOut
